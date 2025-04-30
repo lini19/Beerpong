@@ -3,9 +3,10 @@ const canvasElement = document.getElementById('outputCanvas');
 const canvasCtx = canvasElement.getContext('2d');
 const beep = document.getElementById('beepSound');
 
-const pose = new Pose.Pose({
+const pose = new window.Pose({
   locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
 });
+
 
 pose.setOptions({
   modelComplexity: 1,
