@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+}
+
+video, canvas {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 10px auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}

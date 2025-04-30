@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beerpong Elbow Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Beerpong Elbow Tracker 🏓</h1>
+  <video id="videoInput" autoplay playsinline muted></video>
+  <canvas id="outputCanvas"></canvas>
+  <audio id="beepSound" src="assets/beep.mp3" preload="auto"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
