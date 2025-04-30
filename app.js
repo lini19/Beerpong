@@ -2,22 +2,21 @@ const videoElement = document.getElementById('videoInput');
 const canvasElement = document.getElementById('outputCanvas');
 const canvasCtx = canvasElement.getContext('2d');
 const beep = document.getElementById('beepSound');
-const pose = new Pose({
-  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5/${file}`
-});
 
+const pose = new Pose({
+  locateFile: (file) =>
+    `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5/${file}`,
+});
 
 pose.setOptions({
   modelComplexity: 1,
   smoothLandmarks: true,
   enableSegmentation: false,
   minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5
+  minTrackingConfidence: 0.5,
 });
 
-pose.onResults(onResults);
-
-function onResults(results) {
+pose.onResults((results) => {
   canvasElement.width = videoElement.videoWidth;
   canvasElement.height = videoElement.videoHeight;
 
@@ -38,10 +37,10 @@ function onResults(results) {
     const leftElbow = results.poseLandmarks[13];
     const rightElbow = results.poseLandmarks[14];
 
-    const leftElbowX = leftElbow.x * canvasElement.width;
-    const rightElbowX = rightElbow.x * canvasElement.width;
+    const leftX = leftElbow.x * canvasElement.width;
+    const rightX = rightElbow.x * canvasElement.width;
 
-    if (leftElbowX > centerX || rightElbowX > centerX) {
+    if (leftX > centerX || rightX > centerX) {
       if (beep.paused) {
         beep.currentTime = 0;
         beep.play();
@@ -50,15 +49,18 @@ function onResults(results) {
   }
 
   canvasCtx.restore();
-}
+});
 
-const camera = new camera(videoElement, {
+const camera = new Camera(videoElement, {
   onFrame: async () => {
     await pose.send({ image: videoElement });
   },
   width: 640,
-  height: 480
+  height: 480,
 });
+
+camera.start();
+
 camera.start();
 
 
