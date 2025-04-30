@@ -52,7 +52,7 @@ function onResults(results) {
   canvasCtx.restore();
 }
 
-const camera = new CameraUtils.Camera(videoElement, {
+const camera = new camera(videoElement, {
   onFrame: async () => {
     await pose.send({ image: videoElement });
   },
@@ -60,4 +60,5 @@ const camera = new CameraUtils.Camera(videoElement, {
   height: 480
 });
 camera.start();
+
 
