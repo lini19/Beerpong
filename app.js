@@ -53,7 +53,8 @@ function onResults(results) {
   canvasCtx.restore();
 }
 
-const camera = new Camera.Camera(videoElement, {
+const camera = new CameraUtils.Camera(videoElement, {
+
   onFrame: async () => {
     await pose.send({ image: videoElement });
   },
