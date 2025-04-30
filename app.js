@@ -2,9 +2,8 @@ const videoElement = document.getElementById('videoInput');
 const canvasElement = document.getElementById('outputCanvas');
 const canvasCtx = canvasElement.getContext('2d');
 const beep = document.getElementById('beepSound');
-
-const pose = new window.Pose({
-  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+const pose = new Pose({
+  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5/${file}`
 });
 
 
@@ -54,17 +53,11 @@ function onResults(results) {
 }
 
 const camera = new CameraUtils.Camera(videoElement, {
-
   onFrame: async () => {
     await pose.send({ image: videoElement });
   },
   width: 640,
   height: 480
 });
-try {
-  camera.start();
-} catch (err) {
-  alert("Kamera konnte nicht gestartet werden: " + err.message);
-  console.error("Kamera-Fehler:", err);
-}
+camera.start();
 
