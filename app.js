@@ -64,6 +64,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
       if (tableSide === "spielerseite") {
         // Tischseite ist rechts → linker Ellbogen darf NICHT rechts rüber
+        if (rightElbowX > centerX + tolerance) {
+          foul = true;
+        }
+      }
+
+      if (tableSide === "tischseite") {
+        // Tischseite ist links → rechter Ellbogen darf NICHT links rüber
+        if (leftElbowX < centerX - tolerance) {
+          foul = true;
+        }
+      }
+
+      if (tableSide === "spielerseite") {
+        // Tischseite ist rechts → linker Ellbogen darf NICHT rechts rüber
         if (leftElbowX > centerX + tolerance) {
           foul = true;
         }
