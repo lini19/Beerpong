@@ -3,8 +3,24 @@ body {
   overflow: hidden;
   background: black;
 }
+
 canvas {
   display: block;
   width: 100vw;
   height: 100vh;
+}
+
+/* 🎯 Auswahl für Tischseite oben links */
+#tableSide {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background-color: white;
+  border: none;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
 }

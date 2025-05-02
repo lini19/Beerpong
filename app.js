@@ -1,6 +1,8 @@
 const canvas = document.getElementById('outputCanvas');
 const ctx = canvas.getContext('2d');
 const beep = document.getElementById('beepSound');
+const tableSideSelect = document.getElementById('tableSide');
+
 
 const pose = new Pose({
   locateFile: (file) =>
@@ -40,23 +42,35 @@ pose.onResults((results) => {
   ctx.strokeStyle = 'red';
   ctx.lineWidth = 4;
   ctx.stroke();
-
-  if (
-    results.poseLandmarks &&
-    results.poseLandmarks[13] && results.poseLandmarks[13].visibility > 0.7 &&
-    results.poseLandmarks[14] && results.poseLandmarks[14].visibility > 0.7
-  ) {
-    const leftElbowX = results.poseLandmarks[13].x * width;
-    const rightElbowX = results.poseLandmarks[14].x * width;
-  
-    if (leftElbowX > centerX || rightElbowX > centerX) {
-      if (beep.paused) {
-        beep.currentTime = 0;
-        beep.play();
-      }
-    }
-  }
 });
+
+const tableSide = tableSideSelect.value;
+
+if (
+  results.poseLandmarks &&
+  results.poseLandmarks[13]?.visibility > 0.7 &&
+  results.poseLandmarks[14]?.visibility > 0.7
+) {
+  const leftElbowX = results.poseLandmarks[13].x * width;
+  const rightElbowX = results.poseLandmarks[14].x * width;
+
+  let foul = false;
+  const tolerance = 40;
+
+  if (tableSide === "right") {
+    // Tisch ist rechts → rechter Ellbogen darf NICHT rechts raus
+    if (rightElbowX > centerX + tolerance) foul = true;
+  } else {
+    // Tisch ist links → linker Ellbogen darf NICHT links raus
+    if (leftElbowX < centerX - tolerance) foul = true;
+  }
+
+  if (foul && beep.paused) {
+    beep.currentTime = 0;
+    beep.play();
+  }
+}
+
 
 navigator.mediaDevices.getUserMedia({ video: true })
   .then((stream) => {
