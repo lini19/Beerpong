@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const ctx = canvas.getContext('2d');
   const beep = document.getElementById('beepSound');
   const tableSideSelect = document.getElementById('tableSide');
+  const foulMessage = document.getElementById('foulMessage');
 
   const pose = new Pose({
     locateFile: (file) =>
@@ -34,7 +35,6 @@ window.addEventListener('DOMContentLoaded', () => {
       lineWidth: 2,
     });
 
-    // Mittellinie zeichnen
     ctx.beginPath();
     ctx.moveTo(centerX, 0);
     ctx.lineTo(centerX, height);
@@ -56,36 +56,26 @@ window.addEventListener('DOMContentLoaded', () => {
       let foul = false;
 
       if (tableSide === "tischseite") {
-        // Tischseite ist links → rechter Ellbogen darf NICHT links rüber
-        if (rightElbowX < centerX - tolerance) {
+        if (leftElbowX < centerX - tolerance || rightElbowX < centerX - tolerance) {
           foul = true;
         }
       }
 
       if (tableSide === "spielerseite") {
-        // Tischseite ist rechts → linker Ellbogen darf NICHT rechts rüber
-        if (rightElbowX > centerX + tolerance) {
+        if (leftElbowX > centerX + tolerance || rightElbowX > centerX + tolerance) {
           foul = true;
         }
       }
 
-      if (tableSide === "tischseite") {
-        // Tischseite ist links → rechter Ellbogen darf NICHT links rüber
-        if (leftElbowX < centerX - tolerance) {
-          foul = true;
+      if (foul) {
+        if (beep.paused) {
+          beep.currentTime = 0;
+          beep.play();
         }
-      }
-
-      if (tableSide === "spielerseite") {
-        // Tischseite ist rechts → linker Ellbogen darf NICHT rechts rüber
-        if (leftElbowX > centerX + tolerance) {
-          foul = true;
-        }
-      }
-
-      if (foul && beep.paused) {
-        beep.currentTime = 0;
-        beep.play();
+        foulMessage.style.display = 'block';
+        setTimeout(() => {
+          foulMessage.style.display = 'none';
+        }, 2000);
       }
     }
   });

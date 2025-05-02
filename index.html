@@ -7,20 +7,28 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <select id="tableSide">
     <option value="tischseite">Tischseite</option>
     <option value="spielerseite">Spielerseite</option>
-  </select>  
+  </select>
+
+  <!-- ⚠️ Foul-Meldung -->
+  <div id="foulMessage">⚠️ Foul!</div>
 
   <canvas id="outputCanvas"></canvas>
   <audio id="beepSound" src="assets/beep.mp3" preload="auto"></audio>
 
+  <!-- Mediapipe -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5/pose.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js"></script>
+
+  <!-- App -->
   <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
