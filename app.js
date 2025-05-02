@@ -23,6 +23,16 @@ pose.onResults((results) => {
   ctx.clearRect(0, 0, width, height);
   ctx.drawImage(results.image, 0, 0, width, height);
 
+  drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, {
+    color: '#00FF00',
+    lineWidth: 2,
+  });
+  drawLandmarks(ctx, results.poseLandmarks, {
+    color: '#FF0000',
+    lineWidth: 2,
+  });
+  
+
   // Rote Linie
   ctx.beginPath();
   ctx.moveTo(centerX, 0);
