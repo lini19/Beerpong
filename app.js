@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
       lineWidth: 2,
     });
 
-    // Rote Mittellinie
+    // Mittellinie zeichnen
     ctx.beginPath();
     ctx.moveTo(centerX, 0);
     ctx.lineTo(centerX, height);
@@ -56,14 +56,14 @@ window.addEventListener('DOMContentLoaded', () => {
       let foul = false;
 
       if (tableSide === "tischseite") {
-        // Ellbogen dürfen NICHT links von der Mittellinie
+        // Kein Ellbogen darf links von der Mittellinie sein
         if (leftElbowX < centerX - tolerance || rightElbowX < centerX - tolerance) {
           foul = true;
         }
       }
 
       if (tableSide === "spielerseite") {
-        // Ellbogen dürfen NICHT rechts von der Mittellinie
+        // Kein Ellbogen darf rechts von der Mittellinie sein
         if (leftElbowX > centerX + tolerance || rightElbowX > centerX + tolerance) {
           foul = true;
         }
@@ -97,3 +97,4 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     });
 });
+
