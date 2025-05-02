@@ -1,6 +1,5 @@
-const videoElement = document.getElementById('videoInput');
-const canvasElement = document.getElementById('outputCanvas');
-const canvasCtx = canvasElement.getContext('2d');
+const canvas = document.getElementById('outputCanvas');
+const ctx = canvas.getContext('2d');
 const beep = document.getElementById('beepSound');
 
 const pose = new Pose({
@@ -17,50 +16,56 @@ pose.setOptions({
 });
 
 pose.onResults((results) => {
-  canvasElement.width = videoElement.videoWidth;
-  canvasElement.height = videoElement.videoHeight;
+  const width = canvas.width = results.image.width;
+  const height = canvas.height = results.image.height;
+  const centerX = width / 2;
 
-  const centerX = canvasElement.width / 2;
+  ctx.clearRect(0, 0, width, height);
+  ctx.drawImage(results.image, 0, 0, width, height);
 
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+  // Rote Linie
+  ctx.beginPath();
+  ctx.moveTo(centerX, 0);
+  ctx.lineTo(centerX, height);
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 4;
+  ctx.stroke();
 
-  canvasCtx.beginPath();
-  canvasCtx.moveTo(centerX, 0);
-  canvasCtx.lineTo(centerX, canvasElement.height);
-  canvasCtx.strokeStyle = 'red';
-  canvasCtx.lineWidth = 3;
-  canvasCtx.stroke();
+  if (results.poseLandmarks &&
+      results.poseLandmarks[13] &&
+      results.poseLandmarks[14]) {
+    
+    const leftElbowX = results.poseLandmarks[13].x * width;
+    const rightElbowX = results.poseLandmarks[14].x * width;
 
-  if (results.poseLandmarks) {
-    const leftElbow = results.poseLandmarks[13];
-    const rightElbow = results.poseLandmarks[14];
-
-    const leftX = leftElbow.x * canvasElement.width;
-    const rightX = rightElbow.x * canvasElement.width;
-
-    if (leftX > centerX || rightX > centerX) {
+    if (leftElbowX > centerX || rightElbowX > centerX) {
       if (beep.paused) {
         beep.currentTime = 0;
         beep.play();
       }
     }
   }
-
-  canvasCtx.restore();
 });
 
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await pose.send({ image: videoElement });
-  },
-  width: 640,
-  height: 480,
-});
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then((stream) => {
+    const video = document.createElement('video');
+    video.srcObject = stream;
+    video.play();
 
-camera.start();
+    const camera = new Camera(video, {
+      onFrame: async () => {
+        await pose.send({ image: video });
+      },
+      width: 640,
+      height: 480
+    });
 
-camera.start();
+    camera.start();
+  })
+  .catch((err) => {
+    alert("Kamera konnte nicht geöffnet werden: " + err.message);
+    console.error(err);
+  });
 
 
