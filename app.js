@@ -34,6 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
       lineWidth: 2,
     });
 
+    // Mittellinie zeichnen
     ctx.beginPath();
     ctx.moveTo(centerX, 0);
     ctx.lineTo(centerX, height);
@@ -52,28 +53,25 @@ window.addEventListener('DOMContentLoaded', () => {
       const rightElbowX = results.poseLandmarks[14].x * width;
 
       const tolerance = 40;
-
       let foul = false;
 
       if (tableSide === "tischseite") {
-        // Tischseite = links → kein Ellbogen links erlaubt
-        if (leftElbowX < centerX - tolerance || rightElbowX < centerX - tolerance) {
+        // Tischseite ist links → rechter Ellbogen darf NICHT links rüber
+        if (rightElbowX < centerX - tolerance) {
           foul = true;
         }
       }
 
       if (tableSide === "spielerseite") {
-        // Tischseite = rechts → kein Ellbogen rechts erlaubt
-        if (leftElbowX > centerX + tolerance || rightElbowX > centerX + tolerance) {
+        // Tischseite ist rechts → linker Ellbogen darf NICHT rechts rüber
+        if (leftElbowX > centerX + tolerance) {
           foul = true;
         }
       }
 
-      if (foul) {
-        if (beep.paused) {
-          beep.currentTime = 0;
-          beep.play();
-        }
+      if (foul && beep.paused) {
+        beep.currentTime = 0;
+        beep.play();
       }
     }
   });
@@ -99,4 +97,5 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     });
 });
+
 
