@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const leftElbow = results.poseLandmarks[13];
     const rightElbow = results.poseLandmarks[14];
 
-    if (leftElbow?.visibility > 0.7 && rightElbow?.visibility > 0.7) {
+    if (leftElbow?.visibility > 0.3 && rightElbow?.visibility > 0.3) {
       const leftX = leftElbow.x * width;
       const rightX = rightElbow.x * width;
 
