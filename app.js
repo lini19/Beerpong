@@ -35,6 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
       lineWidth: 2,
     });
 
+    // Rote Mittellinie
     ctx.beginPath();
     ctx.moveTo(centerX, 0);
     ctx.lineTo(centerX, height);
@@ -44,25 +45,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const tableSide = tableSideSelect.value;
 
-    if (
-      results.poseLandmarks &&
-      results.poseLandmarks[13]?.visibility > 0.7 &&
-      results.poseLandmarks[14]?.visibility > 0.7
-    ) {
-      const leftElbowX = results.poseLandmarks[13].x * width;
-      const rightElbowX = results.poseLandmarks[14].x * width;
-
+    if (results.poseLandmarks) {
       const tolerance = 40;
       let foul = false;
 
-      if (tableSide === "tischseite") {
-        if (leftElbowX < centerX - tolerance || rightElbowX < centerX - tolerance) {
+      const elbows = [results.poseLandmarks[13], results.poseLandmarks[14]];
+
+      for (const elbow of elbows) {
+        if (!elbow || elbow.visibility < 0.7) continue;
+
+        const elbowX = elbow.x * width;
+
+        if (tableSide === "tischseite" && elbowX < centerX - tolerance) {
           foul = true;
         }
-      }
 
-      if (tableSide === "spielerseite") {
-        if (leftElbowX > centerX + tolerance || rightElbowX > centerX + tolerance) {
+        if (tableSide === "spielerseite" && elbowX > centerX + tolerance) {
           foul = true;
         }
       }
@@ -101,5 +99,6 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     });
 });
+
 
 
