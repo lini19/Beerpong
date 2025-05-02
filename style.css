@@ -19,7 +19,7 @@ canvas {
   font-size: 16px;
   padding: 6px 10px;
   border-radius: 8px;
-  background-color: white;
+  background-color:white;
   border: none;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
   cursor: pointer;
