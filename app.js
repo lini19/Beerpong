@@ -41,13 +41,14 @@ pose.onResults((results) => {
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  if (results.poseLandmarks &&
-      results.poseLandmarks[13] &&
-      results.poseLandmarks[14]) {
-    
+  if (
+    results.poseLandmarks &&
+    results.poseLandmarks[13] && results.poseLandmarks[13].visibility > 0.7 &&
+    results.poseLandmarks[14] && results.poseLandmarks[14].visibility > 0.7
+  ) {
     const leftElbowX = results.poseLandmarks[13].x * width;
     const rightElbowX = results.poseLandmarks[14].x * width;
-
+  
     if (leftElbowX > centerX || rightElbowX > centerX) {
       if (beep.paused) {
         beep.currentTime = 0;
