@@ -56,11 +56,11 @@ window.addEventListener('DOMContentLoaded', () => {
       let foul = false;
 
       if (tableSide === "left") {
-        // Tisch links → linker Ellbogen darf NICHT über die Linie
+        // Tischseite ist links → linker Ellbogen darf NICHT über die Mittellinie
         if (leftElbowX < centerX - tolerance) foul = true;
       }
       if (tableSide === "right") {
-        // Tisch rechts → rechter Ellbogen darf NICHT über die Linie
+        // Tischseite ist rechts → rechter Ellbogen darf NICHT über die Mittellinie
         if (rightElbowX > centerX + tolerance) foul = true;
       }
 
@@ -92,5 +92,3 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     });
 });
-
-
