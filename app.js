@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
       lineWidth: 2,
     });
 
-    // Rote Mittellinie
+    // Mittellinie zeichnen
     ctx.beginPath();
     ctx.moveTo(centerX, 0);
     ctx.lineTo(centerX, height);
@@ -45,22 +45,26 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const tableSide = tableSideSelect.value;
 
-    if (results.poseLandmarks) {
+    const leftElbow = results.poseLandmarks[13];
+    const rightElbow = results.poseLandmarks[14];
+
+    if (leftElbow?.visibility > 0.7 && rightElbow?.visibility > 0.7) {
+      const leftX = leftElbow.x * width;
+      const rightX = rightElbow.x * width;
+
       const tolerance = 40;
       let foul = false;
 
-      const elbows = [results.poseLandmarks[13], results.poseLandmarks[14]];
-
-      for (const elbow of elbows) {
-        if (!elbow || elbow.visibility < 0.7) continue;
-
-        const elbowX = elbow.x * width;
-
-        if (tableSide === "tischseite" && elbowX < centerX - tolerance) {
+      if (tableSide === "tischseite") {
+        // Kein Ellbogen darf nach links raus
+        if (leftX < centerX - tolerance || rightX < centerX - tolerance) {
           foul = true;
         }
+      }
 
-        if (tableSide === "spielerseite" && elbowX > centerX + tolerance) {
+      if (tableSide === "spielerseite") {
+        // Kein Ellbogen darf nach rechts raus
+        if (leftX > centerX + tolerance || rightX > centerX + tolerance) {
           foul = true;
         }
       }
@@ -70,6 +74,7 @@ window.addEventListener('DOMContentLoaded', () => {
           beep.currentTime = 0;
           beep.play();
         }
+
         foulMessage.style.display = 'block';
         setTimeout(() => {
           foulMessage.style.display = 'none';
@@ -99,6 +104,5 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     });
 });
-
 
 
