@@ -51,24 +51,29 @@ window.addEventListener('DOMContentLoaded', () => {
     ) {
       const leftElbowX = results.poseLandmarks[13].x * width;
       const rightElbowX = results.poseLandmarks[14].x * width;
-
+    
       const tolerance = 40;
       let foul = false;
-
-      if (tableSide === "left") {
-        // Tischseite ist links → linker Ellbogen darf NICHT über die Mittellinie
-        if (leftElbowX < centerX - tolerance) foul = true;
+    
+      if (tableSide === "tischseite") {
+        // Kein Ellbogen darf auf die Tischseite → links von der Mitte
+        if (leftElbowX < centerX - tolerance || rightElbowX < centerX - tolerance) {
+          foul = true;
+        }
       }
-      if (tableSide === "right") {
-        // Tischseite ist rechts → rechter Ellbogen darf NICHT über die Mittellinie
-        if (rightElbowX > centerX + tolerance) foul = true;
+    
+      if (tableSide === "spielerseite") {
+        // Kein Ellbogen darf auf die Tischseite → rechts von der Mitte
+        if (leftElbowX > centerX + tolerance || rightElbowX > centerX + tolerance) {
+          foul = true;
+        }
       }
-
+    
       if (foul && beep.paused) {
         beep.currentTime = 0;
         beep.play();
       }
-    }
+    }    
   });
 
   navigator.mediaDevices.getUserMedia({ video: true })
